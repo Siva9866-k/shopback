@@ -7,7 +7,8 @@ venv/
 env/
 
 # Django migrations
-*/migrations/*
+*/migrations/*.py
+!*/migrations/__init__.py
 
 # Media
 media/
@@ -17,3 +18,10 @@ media/
 
 # Static files
 staticfiles/
+
+# Environment variables
+*.env
+
+# Logs
+*.log
+
