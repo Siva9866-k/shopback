@@ -1,0 +1,54 @@
+{% extends 'theme.html' %}
+
+{% block main %}
+   <div class="container">
+      <div class="row m-5">
+         <div class="col-lg-6 mx-auto">
+            <div class="border shadow">
+               <h1 class="m-5">Create an account</h1>
+               {% if error %}
+               <div>
+                  <div class="alert alert-warning alert-dismissible fade show m-2" role="alert">
+                     <strong>{{ error }}</strong>
+                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+               </div>
+               {%elif success%}
+               <div>
+                  <div class="alert alert-success alert-dismissible fade show m-2" role="alert">
+                     <strong>{{success}}</strong>
+                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+               </div>
+               {% endif %}
+               <form class="m-5" method="POST" action="signup">
+                  {% csrf_token %}
+                  <div class="form-group">
+                     <label>First Name</label>
+                     <input type="text" name="fn" class="form-control" value="{{value.fn}}">
+                  </div>
+                  <div class="form-group">
+                     <label>Last Name</label>
+                     <input type="text" name="ln" class="form-control"  value="{{value.ln}}" required>
+                  </div>
+                  <div class="form-group">
+                     <label>Email Address</label>
+                     <input type="email" name="email" class="form-control" value="{{value.email}}" required>
+                  </div>
+                  <div class="form-group">
+                     <label>Mobile number</label>
+                     <input type="tel" name="mobile" class="form-control" pattern="[0-9]{10}" placeholder="10-digit number" value="{{value.mobile}}" required>
+                  </div>
+                  <div class="form-group">
+                     <label>Password</label>
+                     <input type="password" name="password" class="form-control" minlength="8" required>
+                  </div>
+                  <div class="form-group">
+                     <input type="submit" value="Sign Up" class="btn btn-outline-dark mt-3">
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+{% endblock %}

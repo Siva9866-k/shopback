@@ -1,0 +1,19 @@
+# Python
+*.pyc
+__pycache__/
+
+# Virtual environment
+venv/
+env/
+
+# Django migrations
+*/migrations/*
+
+# Media
+media/
+
+# SQLite database
+*.sqlite3
+
+# Static files
+staticfiles/
