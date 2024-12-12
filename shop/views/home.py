@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from shop.models.product import Product
+from shop.models.product import Product,Offers
 from shop.models.category import Category
 from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password
@@ -11,6 +11,7 @@ from django.views import View  # Correct import for class-based views
 class home(View):
     def get(self, request):
         categories = Category.objects.all()
+        offers= Offers.objects.all()
         category_id = request.GET.get('category')
 
         if category_id:
@@ -18,7 +19,7 @@ class home(View):
         else:
             products = Product.objects.all()
 
-        data = {'products': products, 'categories': categories}
+        data = {'products': products, 'categories': categories,'offers': offers}
         return render(request, 'index.html', data)
 
 '''

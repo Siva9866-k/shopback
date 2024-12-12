@@ -1,0 +1,202 @@
+{% extends 'theme.html' %}
+
+{% block main %}
+
+{% block footer %}
+
+{%endblock%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 20px;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .list-group-item {
+      border: none;
+      margin-bottom: 10px;
+    }
+    .list-group-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .list-group-item h6 {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .btn-link {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .btn-link:hover {
+      text-decoration: underline;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+      border: none;
+    }
+    .price-details {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .price-details span {
+      color: #28a745;
+    }
+    .btn-block {
+      width: 100%;
+    }
+    .item-quantity {
+      width: 60px;
+      text-align: center;
+    }
+    .cart-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 15px; /* Reduced gap */
+    }
+    .cart-items, .payment-details {
+      background-color: #fdfdfd;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .payment-details {
+      border-left: 1px solid #ddd;
+    }
+    .payment-details h4 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .list-group-item span {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h4 class="mb-4">Shopping Cart</h4>
+    <div class="cart-grid">
+      <!-- Cart Items -->
+      <div class="cart-items">
+        <ul class="list-group">
+          {% for item in cart_items %}
+          <li class="list-group-item d-flex justify-content-between align-items-center cart-item" data-item-id="{{ item.id }}">
+            <div class="d-flex align-items-center">
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+              <div class="ms-3">
+                <h6>{{ item.product.name }}</h6>
+                <p>₹{{ item.product.price }}</p>
+
+                <!-- Remove Item -->
+                <button class="btn btn-link text-danger p-0 remove-item">Remove</button>
+
+                <!-- Save for Later -->
+                <form method="POST" class="d-inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="cart_item_id" value="{{ item.id }}">
+                  <button type="submit" name="save_for_later" class="btn btn-link text-muted p-0">Save for Later</button>
+                </form>
+              </div>
+            </div>
+            <div class="d-flex align-items-center">
+              <!-- Quantity Controls -->
+              <button class="btn btn-sm btn-secondary decrease-quantity">-</button>
+              <input type="number" class="form-control item-quantity mx-2" min="1" value="{{ item.quantity }}" readonly>
+              <button class="btn btn-sm btn-primary increase-quantity">+</button>
+            </div>
+            <span class="item-total">₹{{ item.item_total }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Price Details -->
+      <div class="payment-details">
+        <h4>Price Details</h4>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Total Amount</span>
+            <span id="total-price">₹{{ total_amount }}</span>
+          </li>
+        </ul>
+        <button class="btn btn-primary btn-block mt-3">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const cartItemsContainer = document.querySelector(".cart-items");
+      const totalPriceElement = document.getElementById("total-price");
+
+      // Update Total Price
+      function updateTotalPrice() {
+        let totalAmount = 0;
+        document.querySelectorAll(".cart-item").forEach(item => {
+          const price = parseFloat(item.querySelector("p").textContent.replace("₹", ""));
+          const quantity = parseInt(item.querySelector(".item-quantity").value);
+          const itemTotal = price * quantity;
+          item.querySelector(".item-total").textContent = `₹${itemTotal.toFixed(2)}`;
+          totalAmount += itemTotal;
+        });
+        totalPriceElement.textContent = `₹${totalAmount.toFixed(2)}`;
+      }
+
+      // Add Event Listeners for Quantity Buttons
+      cartItemsContainer.addEventListener("click", function (event) {
+        const target = event.target;
+        const cartItem = target.closest(".cart-item");
+
+        if (target.classList.contains("decrease-quantity")) {
+          const quantityInput = cartItem.querySelector(".item-quantity");
+          let quantity = parseInt(quantityInput.value);
+          if (quantity > 1) {
+            quantity--;
+            quantityInput.value = quantity;
+            updateTotalPrice();
+          }
+        }
+
+        if (target.classList.contains("increase-quantity")) {
+          const quantityInput = cartItem.querySelector(".item-quantity");
+          let quantity = parseInt(quantityInput.value);
+          quantity++;
+          quantityInput.value = quantity;
+          updateTotalPrice();
+        }
+
+        if (target.classList.contains("remove-item")) {
+          cartItem.remove();
+          updateTotalPrice();
+        }
+      });
+
+      // Initial Total Price Calculation
+      updateTotalPrice();
+    });
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+{% endblock %}

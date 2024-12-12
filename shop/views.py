@@ -1,4 +1,4 @@
-from django.shortcuts import render
+'''from django.shortcuts import render
 from django.http import HttpResponse
 from .product import Product
 from .category import Category
@@ -84,7 +84,7 @@ def login(request):
         else:
             error_msg="email not found"
             msg={'error':error_msg}
-            return render(request,'login.html',msg)    
+            return render(request,'login.html',msg)  '''  
             
          
         
