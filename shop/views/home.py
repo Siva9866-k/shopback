@@ -21,6 +21,7 @@ class home(View):
 
         data = {'products': products, 'categories': categories,'offers': offers}
         return render(request, 'index.html', data)
+    
 
 '''
 #class based view

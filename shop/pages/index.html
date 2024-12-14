@@ -1,6 +1,44 @@
 {% extends 'theme.html' %}
 
 {% block main %}
+
+<!-- Categories Bar -->
+<section class="categories-bar">
+  <a href="#" class="category-item">
+    <img src="/media/img/grocery.webp" alt="Grocery">
+    <p>Grocery</p>
+  </a>
+  <a href="#" class="category-item">
+    <img src="https://via.placeholder.com/50" alt="Mobiles">
+    <p>Mobiles</p>
+  </a>
+  <a href="#" class="category-item">
+    <img src="https://via.placeholder.com/50" alt="Fashion">
+    <p>Fashion</p>
+  </a>
+  <a href="#" class="category-item">
+    <img src="https://via.placeholder.com/50" alt="Electronics">
+    <p>Electronics</p>
+  </a>
+  <a href="#" class="category-item">
+    <img src="https://via.placeholder.com/50" alt="Home & Furniture">
+    <p>Home & Furniture</p>
+  </a>
+  <a href="#" class="category-item">
+    <img src="https://via.placeholder.com/50" alt="Appliances">
+    <p>Appliances</p>
+  </a>
+  <a href="#" class="category-item">
+    <img src="https://via.placeholder.com/50" alt="Beauty & Toys">
+    <p>Beauty & Toys</p>
+  </a>
+  <a href="#" class="category-item">
+    <img src="https://via.placeholder.com/50" alt="Two Wheelers">
+    <p>Two Wheelers</p>
+  </a>
+</section>
+
+
 <!-- Sliding Hero Banner -->
 <section class="hero-banner container my-4">
   <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
@@ -86,18 +124,21 @@
     <div class="col-md-3">
       <div class="card">
         <!-- Product Image -->
-        <img src="{{ product.image.url }}" class="card-img-top mt-3" alt="{{ product.name }}">
+        <a href="{% url 'product_detail' product.id %}">
+        <img src="{{ product.image.url }}" class="card-img-top mt-3" alt="{{ product.name }}"></a>
 
         <div class="card-body">
           <!-- Product Name -->
-          <h5 class="card-title">{{ product.name }}</h5>
+          <h5 class="card-title"><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h5>
+          
 
           <!-- Product Description 
           <p class="card-text">{{ product.desc|truncatewords:10 }}</p> -->
 
           <!-- Product Price -->
           <p class="card-text"><strong>${{ product.price }}</strong></p>
-
+         
+          
           <!-- Add to Cart Button (Inside a Form) -->
           <form method="POST" action="{% url 'cart' %}">
             {% csrf_token %}
