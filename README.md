@@ -33,7 +33,7 @@ ShopBack aims to provide a seamless and enjoyable online shopping experience wit
 Run the command
 python manage.py runserver
 
-**What to do next**:
+What to do next
 
 - Replace placeholders with your actual tech stack and instructions.
 - Upload your project images into an `images/` folder in your repo.
